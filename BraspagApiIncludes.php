@@ -1,6 +1,8 @@
 <?php
 include 'libs/httpful.phar';
 
+include 'HttpStatus.php';
+
 include 'Models/Link.php';
 include 'Models/CaptureRequest.php';
 include 'Models/CaptureResponse.php';
@@ -10,7 +12,7 @@ include 'Models/Card.php';
 include 'Models/Payment.php';
 include 'Models/CreditCardPayment.php';
 include 'Models/Customer.php';
-include 'Models/Order.php';
+include 'Models/Sale.php';
 include 'Models/Interest.php';
 include 'Models/Error.php';
 
