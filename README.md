@@ -2,7 +2,13 @@ PHP SDK for [Braspag](http://www.braspag.com.br) API
 =========
 
 ## Description
-We build this SDK in order to facilitate the integration of systems in PHP our API
+SDK to facilitate the use of our API by PHP systems.
+
+## Configuration
+Copy ApiBraspagConfig.php.example to ApiBraspagConfig.php.
+The new name is ignored by git (see .gitignore).
+Fill in the values of your MerchandId and MerchandKey.
+
 
 ## Exemples
 You can see examples of use in fales prefixed with "example_{operation}"

@@ -15,6 +15,6 @@ abstract class BraspagApiConfig{
     const defaultCapture = false;
     const defaultAuthenticate = false;
     
-    const merchantId = '94E5EA52-79B0-7DBA-1867-BE7B081EDD97';
-    const merchantKey = '0123456789012345678901234567890123456789';
+    const merchantId	= '00000000-0000-0000-0000-000000000000';
+    const merchantKey	= '00000000-0000-0000-0000-000000000000';
 }
