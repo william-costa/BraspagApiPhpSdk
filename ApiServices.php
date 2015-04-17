@@ -132,7 +132,7 @@ class ApiServices
      * @return mixed
      */
     public function Get($paymentId){
-        $uri = BraspagApiConfig::apiUri . "sales/{$paymentId}"; 
+        $uri = BraspagApiConfig::apiQueryUri . "sales/{$paymentId}"; 
                 
         $response = \Httpful\Request::get($uri)
             ->sendsJson()
