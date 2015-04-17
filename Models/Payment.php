@@ -7,12 +7,14 @@ class Payment
     public $amount;
     public $currency;
     public $country;
-    public $carrier;
+    public $provider;
     public $credentials;
     public $extraDatas;
     public $returnUrl;
     public $reasonCode;
     public $reasonMessage;
+	public $providerReturnCode;
+	public $providerReturnMessage;
     public $status;
     public $links;
     

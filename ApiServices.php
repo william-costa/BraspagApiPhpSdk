@@ -32,7 +32,7 @@ class ApiServices
             ->body($post_data)
             ->send();
         
-        if($response->code == HttpStatus::Ok){            
+        if($response->code == HttpStatus::Created){            
             $sale->payment->paymentId = $response->body->Payment->PaymentId;
             $sale->payment->authenticationUrl = $response->body->Payment->AuthenticationUrl;
             $sale->payment->authorizationCode = $response->body->Payment->AuthorizationCode;
@@ -40,10 +40,12 @@ class ApiServices
             $sale->payment->proofOfSale = $response->body->Payment->ProofOfSale;
             $sale->payment->status = $response->body->Payment->Status;
             $sale->payment->reasonCode = $response->body->Payment->ReasonCode;
-            $sale->payment->reasonMessage = $response->body->Payment->reasonMessage;
+            $sale->payment->reasonMessage = $response->body->Payment->ReasonMessage;
+			$sale->payment->providerReturnCode = $response->body->Payment->ProviderReturnCode;
+			$sale->payment->providerReturnMessage = $response->body->Payment->ProviderReturnMessage;
             
             $sale->payment->links = $this->parseLinks($response->body->Payment->Links);
-            
+			            
             return $sale;
         }elseif($response->code == HttpStatus::BadRequest){          
             return $this->getBadRequestErros($response->body);             
