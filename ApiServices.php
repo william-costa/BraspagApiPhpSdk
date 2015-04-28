@@ -19,6 +19,7 @@ class ApiServices
     
     /**
      * Creates a sale
+     * Boleto Implements: @autor interatia
      * @param Sale $sale 
      * @return mixed
      */
@@ -31,6 +32,8 @@ class ApiServices
             ->addHeaders($this->headers)
             ->body($post_data)
             ->send();
+            
+        (!isset($response->body->Payment->AuthenticationUrl))?($response->body->Payment->AuthenticationUrl=''):("");
         
         if($response->code == HttpStatus::Created){            
             $sale->payment->paymentId = $response->body->Payment->PaymentId;
@@ -44,6 +47,12 @@ class ApiServices
 			$sale->payment->providerReturnCode = $response->body->Payment->ProviderReturnCode;
 			$sale->payment->providerReturnMessage = $response->body->Payment->ProviderReturnMessage;
             
+            if($response->body->Payment->Type == 'Boleto'){
+                $sale->payment->Url = $response->body->Payment->Url; 
+                $sale->payment->BarCodeNumber = $response->body->Payment->BarCodeNumber; 
+                $sale->payment->DigitableLine = $response->body->Payment->DigitableLine; 
+            }
+
             $sale->payment->links = $this->parseLinks($response->body->Payment->Links);
 			            
             return $sale;
@@ -132,8 +141,7 @@ class ApiServices
      * @return mixed
      */
     public function Get($paymentId){
-        $uri = BraspagApiConfig::apiQueryUri . "sales/{$paymentId}"; 
-                
+        $uri = BraspagApiConfig::apiQueryuri . "sales/{$paymentId}"; 
         $response = \Httpful\Request::get($uri)
             ->sendsJson()
             ->addHeaders($this->headers)
@@ -248,6 +256,23 @@ class ApiServices
         $payment->links = $this->parseLinks($apiPayment->Links);
         
         return $payment;
+    }
+    
+     /**
+     * Creates a sale
+     * Boleto Implements: @autor interatia
+     * @param Sale $debug,$title 
+     * @return standardoutput
+     */
+    public function debug($debug,$title="Debug:")
+    {
+        echo "<hr/>";
+        echo "<h2>Start: $title</h2>";
+        echo '<textarea cols="100" rows="50">';    
+        print_r($debug);
+        echo "</textarea>";
+        echo "<h2>End: $title</h2>";
+        echo "<hr/>";
     }
     
 }

@@ -11,6 +11,7 @@ include 'Models/Address.php';
 include 'Models/Card.php';
 include 'Models/Payment.php';
 include 'Models/CreditCardPayment.php';
+include 'Models/BoletoPayment.php';
 include 'Models/Customer.php';
 include 'Models/Sale.php';
 include 'Models/Interest.php';
