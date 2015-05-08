@@ -2,28 +2,28 @@
 
 include 'BraspagApiIncludes.php';
 
-$paymentId = '038722c3-4de5-4b73-ad5b-ec9fb07794d7';
+$paymentId = $_GET['paymentId'];
 
 $voidAmount = 1500;
 
-$api = new ApiServices();
+$api = new BraspagApiServices();
 $result = $api->Void($paymentId, $voidAmount);
 
-if(is_a($result, 'VoidResponse')){
+if(is_a($result, 'BraspagVoidResponse')){
     /*
      * In this case, you made a succesful call to API and receive a VoidResponse object in response
      */
-    var_export($result);
+    $api->debug($result,"Void Response succesful:"); 
 } elseif(is_array($result)){
     /*
      * In this case, you made a Bad Request and receive a collection with all errors
      */
-    var_export($result);
+    $api->debug($result,"Bad Request:"); 
 } else{    
     /*
      * In this case, you received other error, such as Forbidden or Unauthorized
      */
-    echo "HTTP Status Code: {$result}";
+    $api->debug($result,"HTTP Status Code:"); 
 }
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-class CaptureRequest
+class BraspagCaptureRequest
 {
     public $amount;
     public $serviceTaxAmount;

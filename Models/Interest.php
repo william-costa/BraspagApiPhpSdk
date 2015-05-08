@@ -1,6 +1,6 @@
 <?php
 
-class Interest
+class BraspagInterest
 {
     const ByMerchant = "ByMerchant";
     const ByIssuer = "ByIssuer";

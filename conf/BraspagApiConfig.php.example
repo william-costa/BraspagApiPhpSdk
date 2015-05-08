@@ -7,8 +7,7 @@
  * @author pfernandes
  */
 abstract class BraspagApiConfig{
-    const apiUri = 'https://apisandbox.braspag.com.br/v2/';
-	const apiQueryUri = 'https://apiquerysandbox.braspag.com.br/v2/';
+    const apiUri = 'https://apisandbox.braspag.com.br/v1/';
     
     const defaultCurrency = 'BRL';
     const defaultCountry = 'BRA';
@@ -16,6 +15,6 @@ abstract class BraspagApiConfig{
     const defaultCapture = false;
     const defaultAuthenticate = false;
     
-    const merchantId	= '0000000-0000-0000-0000-000000000000';
-    const merchantKey	= '0000000000000000000000000000000000000000';
+    const merchantId	= '00000000-0000-0000-0000-000000000000';
+    const merchantKey	= '00000000-0000-0000-0000-000000000000';
 }

@@ -1,6 +1,6 @@
 <?php
 
-class Customer
+class BraspagCustomer
 {
     public $name;
     public $identity;
