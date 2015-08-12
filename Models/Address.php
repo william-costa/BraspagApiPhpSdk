@@ -1,6 +1,6 @@
 <?php
 
-class Address
+class BraspagAddress
 {
     public $street;
     public $number;

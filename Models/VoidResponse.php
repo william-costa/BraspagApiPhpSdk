@@ -1,6 +1,6 @@
 <?php
 
-class VoidResponse
+class BraspagVoidResponse
 {
     public $status;
     public $reasonCode;

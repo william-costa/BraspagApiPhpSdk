@@ -1,6 +1,6 @@
 <?php
 
-class Payment
+class BraspagPayment
 {
     public $paymentId;
     public $type;

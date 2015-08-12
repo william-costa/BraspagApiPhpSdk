@@ -1,6 +1,6 @@
 <?php
 
-class CaptureResponse
+class BraspagCaptureResponse
 {
     public $status;
     public $reasonCode;
