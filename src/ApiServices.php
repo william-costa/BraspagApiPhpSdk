@@ -46,6 +46,11 @@ class BraspagApiServices
             $sale->payment->reasonMessage = $responsePayment->ReasonMessage;
             $sale->payment->currency = $responsePayment->Currency;
             $sale->payment->country = $responsePayment->Country;
+            $sale->payment->receivedDate = $this->utils->getResponseValue($responsePayment, 'ReceivedDate');
+            $sale->capturedDate = $this->utils->getResponseValue($responsePayment, 'CapturedDate');
+            $sale->voidedDate = $this->utils->getResponseValue($responsePayment, 'VoidedDate');
+            $sale->capturedAmount = $this->utils->getResponseValue($responsePayment, 'CapturedAmount');
+            $sale->capturedAmount = $this->utils->getResponseValue($responsePayment, 'VoidedAmount');
             $sale->payment->providerReturnCode = $this->utils->getResponseValue($responsePayment, 'ProviderReturnCode');
             $sale->payment->providerReturnMessage = $this->utils->getResponseValue($responsePayment, 'ProviderReturnMessage');
             

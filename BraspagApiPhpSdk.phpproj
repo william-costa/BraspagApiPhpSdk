@@ -16,6 +16,7 @@
     <IncludeDebugInformation>false</IncludeDebugInformation>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="src\conf\BraspagApiConfig.php" />
     <Content Include="src\conf\BraspagApiConfig.php.example" />
     <Content Include="src\libs\httpful.phar" />
   </ItemGroup>
@@ -25,7 +26,6 @@
     <Compile Include="src\ApiServices.php" />
     <Compile Include="src\BraspagApiIncludes.php" />
     <Compile Include="src\BraspagUtils.php" />
-    <Compile Include="src\conf\BraspagApiConfig.php" />
     <Compile Include="Examples\example_all_get.php" />
     <Compile Include="Examples\example_boleto_authorize.php" />
     <Compile Include="Examples\example_credit_authorize.php" />
