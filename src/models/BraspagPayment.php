@@ -1,10 +1,15 @@
 <?php
 
-class Payment
+class BraspagPayment
 {
     public $paymentId;
     public $type;
     public $amount;
+    public $capturedAmount;
+    public $voidedAmount;
+    public $receivedDate;
+    public $capturedDate;
+    public $voidedDate;
     public $currency;
     public $country;
     public $provider;
@@ -17,6 +22,7 @@ class Payment
 	public $providerReturnMessage;
     public $status;
     public $links;
+    public $recurrentPayment;
     
     public function __construct(){
         $this->country = BraspagApiConfig::defaultCountry;

@@ -1,8 +1,10 @@
 <?php
 
-class Sale
+class BraspagSale
 {
     public $merchantOrderId;
     public $customer;
     public $payment;
 }
+
+?>

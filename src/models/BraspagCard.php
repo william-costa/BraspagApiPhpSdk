@@ -1,6 +1,6 @@
 <?php
 
-class Card
+class BraspagCard
 {
     public $cardNumber;
     public $holder;

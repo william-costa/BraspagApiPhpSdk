@@ -1,6 +1,6 @@
 <?php
 
-class Link
+class BraspagLink
 {
     public $method;
     public $rel;
