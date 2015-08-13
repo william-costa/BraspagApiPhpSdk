@@ -52,18 +52,18 @@ if(is_a($result, 'BraspagSale')){
     echo "<li><a href=\"example_credit_void.php?paymentId={$sale->payment->paymentId}\" target=\"_blank\">Void Card</a></li>";
     echo "<li><a href=\"example_all_get.php?paymentId={$sale->payment->paymentId}\" target=\"_blank\">Get Card</a></li></ul>";
     
-    $api->debug($sale,"Card Success!");  
+    BraspagUtils::debug($sale,"Card Success!");  
     
 } elseif(is_array($result)){
     /*
      * In this case, you made a Bad Request and receive a collection with all errors
      */
-    $api->debug($result,"Bad Request Auth!");
+    BraspagUtils::debug($result,"Bad Request Auth!");
 } else{    
     /*
      * In this case, you received other error, such as Forbidden or Unauthorized
      */
-    $api->debug($result,"HTTP Status Code!");
+    BraspagUtils::debug($result,"HTTP Status Code!");
 }l
 
 ?>

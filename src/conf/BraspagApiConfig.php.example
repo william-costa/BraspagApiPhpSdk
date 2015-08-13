@@ -1,7 +1,5 @@
 <?php
 
-namespace Braspag;
-
 /**
  * Configurations of Api.
  *
@@ -21,5 +19,3 @@ abstract class BraspagApiConfig{
     const merchantId	= '00000000-0000-0000-0000-000000000000';
     const merchantKey	= '0000000000000000000000000000000000000000';
 }
-
-?>

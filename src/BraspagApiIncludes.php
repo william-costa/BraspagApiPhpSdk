@@ -20,5 +20,6 @@ include 'models/BraspagError.php';
 include 'models/BraspagRecurrentPayment.php';
 include 'conf/BraspagApiConfig.php';
 include 'ApiServices.php';
+include 'RecurrentApiServices.php';
 include 'BraspagUtils.php';
 ?>

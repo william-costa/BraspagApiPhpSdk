@@ -21,8 +21,9 @@
     <Content Include="src\libs\httpful.phar" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Examples\example_credit_recurrent_authorize.php" />
+    <Compile Include="Examples\RecurrentPayments\example_credit_recurrent_authorize.php" />
     <Compile Include="Examples\example_eletronictransfer_authorize.php" />
+    <Compile Include="Examples\RecurrentPayments\example_update_customer.php" />
     <Compile Include="src\ApiServices.php" />
     <Compile Include="src\BraspagApiIncludes.php" />
     <Compile Include="src\BraspagUtils.php" />
@@ -49,8 +50,10 @@
     <Compile Include="src\models\BraspagRecurrentPayment.php" />
     <Compile Include="src\models\BraspagSale.php" />
     <Compile Include="src\models\BraspagVoidResponse.php" />
+    <Compile Include="src\RecurrentApiServices.php" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Examples\RecurrentPayments\" />
     <Folder Include="src\conf\" />
     <Folder Include="src\libs\" />
     <Folder Include="src\models\" />
