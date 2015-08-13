@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
+
 include($_SERVER['DOCUMENT_ROOT']."/src/BraspagApiIncludes.php");
 
 $paymentId = $_GET['paymentId'];

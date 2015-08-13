@@ -5,6 +5,11 @@ class BraspagPayment
     public $paymentId;
     public $type;
     public $amount;
+    public $capturedAmount;
+    public $voidedAmount;
+    public $receivedDate;
+    public $capturedDate;
+    public $voidedDate;
     public $currency;
     public $country;
     public $provider;

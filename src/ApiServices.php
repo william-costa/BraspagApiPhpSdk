@@ -187,11 +187,6 @@ class BraspagApiServices
         return $response->code;
     }
     
-    /**
-     * Summary of parseLink
-     * @param mixed $source 
-     * @return BraspagLink
-     */
     private function parseLink($source){
         if($source == null) return null;
 
@@ -233,22 +228,23 @@ class BraspagApiServices
     
     private function parseCustomer($apiCustomer){
         $customer = new BraspagCustomer();
-        (property_exists($apiCustomer,'Name'))?($customer->name = $apiCustomer->Name):('');
-        (property_exists($apiCustomer,'Email'))?($customer->email = $apiCustomer->Email):('');
-        (property_exists($apiCustomer,'Identity'))?($customer->identity = $apiCustomer->Identity):('');
-        (property_exists($apiCustomer,'IdentityType'))?($customer->identityType = $apiCustomer->IdentityType):('');
-        (property_exists($apiCustomer,'Birthdate'))?($customer->birthDate = $apiCustomer->Birthdate):('');
+        $customer->name = $apiCustomer->Name;
+        $customer->email = $this->utils->getResponseValue($apiCustomer, 'Email');
+        $customer->identity = $this->utils->getResponseValue($apiCustomer, 'Identity');
+        $customer->identityType = $this->utils->getResponseValue($apiCustomer, 'IdentityType');
+        $customer->birthDate = $this->utils->getResponseValue($apiCustomer, 'Birthdate');
         
-        if($apiCustomer->Address != null){
+        $apiAddress = $this->utils->getResponseValue($apiCustomer, 'Address');
+        if($apiAddress != null){
             $address = new BraspagAddress();
-            (property_exists($apiCustomer->Address,'City'))?($address->city = $apiCustomer->Address->City):('');
-            (property_exists($apiCustomer->Address,'Complement'))?($address->complement = $apiCustomer->Address->Complement ):('');
-            (property_exists($apiCustomer->Address,'Country'))?($address->country = $apiCustomer->Address->Country):('');
-            (property_exists($apiCustomer->Address,'District'))?($address->district = $apiCustomer->Address->District):('');
-            (property_exists($apiCustomer->Address,'Number'))?($address->number = $apiCustomer->Address->Number):('');
-            (property_exists($apiCustomer->Address,'State'))?($address->state = $apiCustomer->Address->State):('');
-            (property_exists($apiCustomer->Address,'Street'))?($address->street = $apiCustomer->Address->Street):('');
-            (property_exists($apiCustomer->Address,'ZipCode'))?($address->zipCode = $apiCustomer->Address->ZipCode):('');
+            $address->country = $apiAddress->Country;
+            $customer->city = $this->utils->getResponseValue($apiAddress, 'City');
+            $customer->complement = $this->utils->getResponseValue($apiAddress, 'Complement');
+            $customer->district = $this->utils->getResponseValue($apiAddress, 'District');
+            $customer->number = $this->utils->getResponseValue($apiAddress, 'Number');
+            $customer->state = $this->utils->getResponseValue($apiAddress, 'State');
+            $customer->street = $this->utils->getResponseValue($apiAddress, 'Street');
+            $customer->zipCode = $this->utils->getResponseValue($apiAddress, 'ZipCode');
             $customer->address = $address;
         }
         
@@ -258,55 +254,73 @@ class BraspagApiServices
     private function parsePayment($apiPayment){
         $payment = new BraspagPayment();
 
-        if(property_exists($apiPayment,'BarCodeNumber')) {
-            $payment = new BraspagBoletoPayment();    
-            
-            (property_exists($apiPayment,'Instructions'))?($payment->instructions = $apiPayment->Instructions):('');
-            (property_exists($apiPayment,'ExpirationDate'))?($payment->expirationDate = $apiPayment->ExpirationDate):('');
-            (property_exists($apiPayment,'Demonstrative'))?($payment->demonstrative = $apiPayment->Demonstrative):('');
-            (property_exists($apiPayment,'Url'))?($payment->url = $apiPayment->Url):('');
-            (property_exists($apiPayment,'BoletoNumber'))?($payment->boletoNumber = $apiPayment->BoletoNumber):('');
-            (property_exists($apiPayment,'BarCodeNumber'))?($payment->barcodeNumber = $apiPayment->BarCodeNumber):('');
-            (property_exists($apiPayment,'DigitableLine'))?($payment->digitableLine = $apiPayment->DigitableLine):('');
-            (property_exists($apiPayment,'Assignor'))?($payment->assignor = $apiPayment->Assignor):('');
-            (property_exists($apiPayment,'Address'))?($payment->address = $apiPayment->Address):('');
-            (property_exists($apiPayment,'Identification'))?($payment->identification = $apiPayment->Identification):('');
-        }
-        
-        if(property_exists($apiPayment,'CreditCard')){
+        if($apiPayment->Type == 'CreditCard'){
             $payment = new BraspagCreditCardPayment();
-            $payment->installments = $apiPayment->Installments;
+            $this->parseCreditAndDebitPayment($payment, $apiPayment, $apiPayment->CreditCard);
+            
             $payment->capture = $apiPayment->Capture;
             $payment->authenticate = $apiPayment->Authenticate;
-            $payment->interest = $apiPayment->Interest;
+            $payment->installments = $apiPayment->Installments;
             
-            $card = new BraspagCard();
-            $card->brand = $apiPayment->CreditCard->Brand;
-            $card->cardNumber = $apiPayment->CreditCard->CardNumber;
-            $card->expirationDate = $apiPayment->CreditCard->ExpirationDate;
-            $card->holder = $apiPayment->CreditCard->Holder;
-            $payment->creditCard = $card;
+        }elseif($apiPayment->Type == 'DebitCard'){
+            $payment = new BraspagDebitCardPayment();
+            $this->parseCreditAndDebitPayment($payment, $apiPayment, $apiPayment->DebitCard);
+
+        }elseif($apiPayment->Type == 'Boleto') {
+            $payment = new BraspagBoletoPayment();    
+
+            $payment->url = $this->utils->getResponseValue($apiPayment, 'Url');
+            $payment->barCodeNumber = $this->utils->getResponseValue($apiPayment, 'BarCodeNumber');
+            $payment->digitableLine = $this->utils->getResponseValue($apiPayment, 'DigitableLine');
+            $payment->boletoNumber = $this->utils->getResponseValue($apiPayment, 'BoletoNumber');
+            
+            $payment->instructions = $this->utils->getResponseValue($apiPayment, 'Instructions');
+            $payment->expirationDate = $this->utils->getResponseValue($apiPayment, 'ExpirationDate');
+            $payment->demonstrative = $this->utils->getResponseValue($apiPayment, 'Demonstrative');
+            $payment->assignor = $this->utils->getResponseValue($apiPayment, 'Assignor');
+            $payment->address = $this->utils->getResponseValue($apiPayment, 'Address');
+            $payment->identification = $this->utils->getResponseValue($apiPayment, 'Identification');
+
+        }elseif($apiPayment->Type == 'EletronicTransfer'){
+            $payment->url = $this->utils->getResponseValue($apiPayment, 'Url');
         }
         
         $payment->paymentId = $apiPayment->PaymentId;
-        
-        (property_exists($apiPayment,'AuthenticationUrl'))?($payment->authenticationUrl = $apiPayment->AuthenticationUrl):('');
-        (property_exists($apiPayment,'AuthorizationCode'))?($payment->authorizationCode = $apiPayment->AuthorizationCode):('');
-        (property_exists($apiPayment,'AcquirerTransactionId'))?($payment->acquirerTransactionId = $apiPayment->AcquirerTransactionId):('');
-        (property_exists($apiPayment,'ProofOfSale'))?($payment->proofOfSale = $apiPayment->ProofOfSale):('');
-        (property_exists($apiPayment,'Status'))?($payment->status = $apiPayment->Status):('');
-        (property_exists($apiPayment,'ReasonCode'))?($payment->reasonCode = $apiPayment->ReasonCode):('');
-        (property_exists($apiPayment,'reasonMessage'))?($payment->reasonMessage = $apiPayment->reasonMessage):('');
-        (property_exists($apiPayment,'Amount'))?($payment->amount = $apiPayment->Amount):('');
-        (property_exists($apiPayment,'Carrier'))?($payment->carrier = $apiPayment->Carrier):('');
-        (property_exists($apiPayment,'Country'))?($payment->country = $apiPayment->Country):('');
-        (property_exists($apiPayment,'Currency'))?($payment->currency = $apiPayment->Currency):('');
-        
+        $payment->amount = $apiPayment->Amount;
+        $payment->capturedAmount = $this->utils->getResponseValue($apiPayment, 'CapturedAmount');
+        $payment->capturedAmount = $this->utils->getResponseValue($apiPayment, 'VoidedAmount');
+        $payment->receivedDate = $apiPayment->ReceivedDate;
+        $payment->capturedDate = $this->utils->getResponseValue($apiPayment, 'CapturedDate');
+        $payment->voidedDate = $this->utils->getResponseValue($apiPayment, 'VoidedDate');
+        $payment->country = $apiPayment->Country;
+        $payment->currency = $apiPayment->Currency;
+        $payment->provider = $apiPayment->Provider;
+        $payment->status = $apiPayment->Status;
+        $payment->reasonCode = $apiPayment->ReasonCode;
+        $payment->reasonMessage = $apiPayment->ReasonMessage;
+        $payment->providerReturnCode = $this->utils->getResponseValue($apiPayment, 'ProviderReturnCode');
+        $payment->providerReturnMessage = $this->utils->getResponseValue($apiPayment, 'ProviderReturnMessage');
+        $payment->returnUrl = $this->utils->getResponseValue($apiPayment, 'ReturnUrl');        
         $payment->links = $this->parseLinks($apiPayment->Links);
         
         return $payment;
     }
     
+    private function parseCreditAndDebitPayment($payment, $apiPayment, $card){
+        $payment->authenticationUrl = $this->utils->getResponseValue($apiPayment, 'AuthenticationUrl');
+        $payment->authorizationCode = $this->utils->getResponseValue($apiPayment, 'AuthorizationCode');
+        $payment->acquirerTransactionId = $this->utils->getResponseValue($apiPayment, 'AcquirerTransactionId');
+        $payment->proofOfSale = $this->utils->getResponseValue($apiPayment, 'ProofOfSale');
+        $payment->eci = $this->utils->getResponseValue($apiPayment, 'Eci');
+
+        $parsedCard = new BraspagCard();
+        $parsedCard->brand = $card->Brand;
+        $parsedCard->cardNumber = $card->CardNumber;
+        $parsedCard->expirationDate = $card->ExpirationDate;
+        $parsedCard->holder = $card->Holder;
+        $payment->creditCard = $parsedCard;
+    }
+
     /**     
      * Debug Function
      * @param Sale $debug,$title 
