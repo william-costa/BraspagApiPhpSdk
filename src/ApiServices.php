@@ -15,8 +15,6 @@ class BraspagApiServices
                 'MerchantId' => BraspagApiConfig::merchantId,
                 'MerchantKey' => BraspagApiConfig::merchantKey
             );
-
-        $this->utils = new BraspagUtils();
     }
     
     /**
@@ -46,49 +44,49 @@ class BraspagApiServices
             $sale->payment->reasonMessage = $responsePayment->ReasonMessage;
             $sale->payment->currency = $responsePayment->Currency;
             $sale->payment->country = $responsePayment->Country;
-            $sale->payment->receivedDate = $this->utils->getResponseValue($responsePayment, 'ReceivedDate');
-            $sale->capturedDate = $this->utils->getResponseValue($responsePayment, 'CapturedDate');
-            $sale->voidedDate = $this->utils->getResponseValue($responsePayment, 'VoidedDate');
-            $sale->capturedAmount = $this->utils->getResponseValue($responsePayment, 'CapturedAmount');
-            $sale->capturedAmount = $this->utils->getResponseValue($responsePayment, 'VoidedAmount');
-            $sale->payment->providerReturnCode = $this->utils->getResponseValue($responsePayment, 'ProviderReturnCode');
-            $sale->payment->providerReturnMessage = $this->utils->getResponseValue($responsePayment, 'ProviderReturnMessage');
+            $sale->payment->receivedDate = BraspagUtils::getResponseValue($responsePayment, 'ReceivedDate');
+            $sale->capturedDate = BraspagUtils::getResponseValue($responsePayment, 'CapturedDate');
+            $sale->voidedDate = BraspagUtils::getResponseValue($responsePayment, 'VoidedDate');
+            $sale->capturedAmount = BraspagUtils::getResponseValue($responsePayment, 'CapturedAmount');
+            $sale->capturedAmount = BraspagUtils::getResponseValue($responsePayment, 'VoidedAmount');
+            $sale->payment->providerReturnCode = BraspagUtils::getResponseValue($responsePayment, 'ProviderReturnCode');
+            $sale->payment->providerReturnMessage = BraspagUtils::getResponseValue($responsePayment, 'ProviderReturnMessage');
             
             if($responsePayment->Type == 'CreditCard' || $responsePayment->Type == 'DebitCard'){
-                $sale->payment->authenticationUrl = $this->utils->getResponseValue($responsePayment, 'AuthenticationUrl');
-                $sale->payment->authorizationCode = $this->utils->getResponseValue($responsePayment, 'AuthorizationCode');
-                $sale->payment->acquirerTransactionId = $this->utils->getResponseValue($responsePayment, 'AcquirerTransactionId');
-                $sale->payment->proofOfSale = $this->utils->getResponseValue($responsePayment, 'ProofOfSale');
+                $sale->payment->authenticationUrl = BraspagUtils::getResponseValue($responsePayment, 'AuthenticationUrl');
+                $sale->payment->authorizationCode = BraspagUtils::getResponseValue($responsePayment, 'AuthorizationCode');
+                $sale->payment->acquirerTransactionId = BraspagUtils::getResponseValue($responsePayment, 'AcquirerTransactionId');
+                $sale->payment->proofOfSale = BraspagUtils::getResponseValue($responsePayment, 'ProofOfSale');
 
             }elseif($response->body->Payment->Type == 'Boleto'){
-                $sale->payment->url = $this->utils->getResponseValue($responsePayment, 'Url');
-                $sale->payment->barCodeNumber = $this->utils->getResponseValue($responsePayment, 'BarCodeNumber');
-                $sale->payment->digitableLine = $this->utils->getResponseValue($responsePayment, 'DigitableLine');
-                $sale->payment->boletoNumber = $this->utils->getResponseValue($responsePayment, 'BoletoNumber');
+                $sale->payment->url = BraspagUtils::getResponseValue($responsePayment, 'Url');
+                $sale->payment->barCodeNumber = BraspagUtils::getResponseValue($responsePayment, 'BarCodeNumber');
+                $sale->payment->digitableLine = BraspagUtils::getResponseValue($responsePayment, 'DigitableLine');
+                $sale->payment->boletoNumber = BraspagUtils::getResponseValue($responsePayment, 'BoletoNumber');
 
             }elseif($response->body->Payment->Type == 'EletronicTransfer'){    
-                $sale->payment->url = $this->utils->getResponseValue($responsePayment, 'Url');                
+                $sale->payment->url = BraspagUtils::getResponseValue($responsePayment, 'Url');                
 
             }            
 
-            $recurrentResponse = $this->utils->getResponseValue($responsePayment, 'RecurrentPayment');
+            $recurrentResponse = BraspagUtils::getResponseValue($responsePayment, 'RecurrentPayment');
 
             if($recurrentResponse != null){
-                $sale->payment->recurrentPayment->recurrentPaymentId = $this->utils->getResponseValue($recurrentResponse, 'RecurrentPaymentId');
+                $sale->payment->recurrentPayment->recurrentPaymentId = BraspagUtils::getResponseValue($recurrentResponse, 'RecurrentPaymentId');
                 $sale->payment->recurrentPayment->reasonCode = $recurrentResponse->ReasonCode;
                 $sale->payment->recurrentPayment->reasonMessage = $recurrentResponse->ReasonMessage;
-                $sale->payment->recurrentPayment->nextRecurrency = $this->utils->getResponseValue($recurrentResponse, 'NextRecurrency');
-                $sale->payment->recurrentPayment->startDate = $this->utils->getResponseValue($recurrentResponse, 'StartDate');
-                $sale->payment->recurrentPayment->endDate = $this->utils->getResponseValue($recurrentResponse, 'EndDate');
-                $sale->payment->recurrentPayment->interval = $this->utils->getResponseValue($recurrentResponse, 'Interval');
-                $sale->payment->recurrentPayment->link = $this->parseLink($this->utils->getResponseValue($recurrentResponse, 'Link'));
+                $sale->payment->recurrentPayment->nextRecurrency = BraspagUtils::getResponseValue($recurrentResponse, 'NextRecurrency');
+                $sale->payment->recurrentPayment->startDate = BraspagUtils::getResponseValue($recurrentResponse, 'StartDate');
+                $sale->payment->recurrentPayment->endDate = BraspagUtils::getResponseValue($recurrentResponse, 'EndDate');
+                $sale->payment->recurrentPayment->interval = BraspagUtils::getResponseValue($recurrentResponse, 'Interval');
+                $sale->payment->recurrentPayment->link = $this->parseLink(BraspagUtils::getResponseValue($recurrentResponse, 'Link'));
             }
 
             $sale->payment->links = $this->parseLinks($response->body->Payment->Links);
             
             return $sale;
         }elseif($response->code == BraspagHttpStatus::BadRequest){          
-            return $this->getBadRequestErros($response->body);             
+            return BraspagUtils::getBadRequestErros($response->body);             
         }  
         
         return $response->code;
@@ -124,7 +122,7 @@ class BraspagApiServices
             return $captureResponse;
             
         }elseif($response->code == BraspagHttpStatus::BadRequest){            
-            return $this->getBadRequestErros($response->body);            
+            return BraspagUtils::getBadRequestErros($response->body);            
         }   
         
         return $response->code;
@@ -160,7 +158,7 @@ class BraspagApiServices
             return $voidResponse;
             
         }elseif($response->code == BraspagHttpStatus::BadRequest){            
-            return $this->getBadRequestErros($response->body);            
+            return BraspagUtils::getBadRequestErros($response->body);            
         }   
         
         return $response->code;
@@ -186,7 +184,7 @@ class BraspagApiServices
             return $sale;
             
         }elseif($response->code == BraspagHttpStatus::BadRequest){            
-            return $this->getBadRequestErros($response->body);            
+            return BraspagUtils::getBadRequestErros($response->body);            
         }   
         
         return $response->code;
@@ -215,41 +213,25 @@ class BraspagApiServices
         return $linkCollection;
     }
     
-    private function getBadRequestErros($errors){
-        
-        $badRequestErrors = array();
-        
-        foreach ($errors as $e)
-        {
-            $error = new BraspagError();
-            $error->code = $e->Code;
-            $error->message = $e->Message;
-            
-            array_push($badRequestErrors, $error);
-        }  
-        
-        return $badRequestErrors;
-    }
-    
     private function parseCustomer($apiCustomer){
         $customer = new BraspagCustomer();
         $customer->name = $apiCustomer->Name;
-        $customer->email = $this->utils->getResponseValue($apiCustomer, 'Email');
-        $customer->identity = $this->utils->getResponseValue($apiCustomer, 'Identity');
-        $customer->identityType = $this->utils->getResponseValue($apiCustomer, 'IdentityType');
-        $customer->birthDate = $this->utils->getResponseValue($apiCustomer, 'Birthdate');
+        $customer->email = BraspagUtils::getResponseValue($apiCustomer, 'Email');
+        $customer->identity = BraspagUtils::getResponseValue($apiCustomer, 'Identity');
+        $customer->identityType = BraspagUtils::getResponseValue($apiCustomer, 'IdentityType');
+        $customer->birthDate = BraspagUtils::getResponseValue($apiCustomer, 'Birthdate');
         
-        $apiAddress = $this->utils->getResponseValue($apiCustomer, 'Address');
+        $apiAddress = BraspagUtils::getResponseValue($apiCustomer, 'Address');
         if($apiAddress != null){
             $address = new BraspagAddress();
             $address->country = $apiAddress->Country;
-            $customer->city = $this->utils->getResponseValue($apiAddress, 'City');
-            $customer->complement = $this->utils->getResponseValue($apiAddress, 'Complement');
-            $customer->district = $this->utils->getResponseValue($apiAddress, 'District');
-            $customer->number = $this->utils->getResponseValue($apiAddress, 'Number');
-            $customer->state = $this->utils->getResponseValue($apiAddress, 'State');
-            $customer->street = $this->utils->getResponseValue($apiAddress, 'Street');
-            $customer->zipCode = $this->utils->getResponseValue($apiAddress, 'ZipCode');
+            $customer->city = BraspagUtils::getResponseValue($apiAddress, 'City');
+            $customer->complement = BraspagUtils::getResponseValue($apiAddress, 'Complement');
+            $customer->district = BraspagUtils::getResponseValue($apiAddress, 'District');
+            $customer->number = BraspagUtils::getResponseValue($apiAddress, 'Number');
+            $customer->state = BraspagUtils::getResponseValue($apiAddress, 'State');
+            $customer->street = BraspagUtils::getResponseValue($apiAddress, 'Street');
+            $customer->zipCode = BraspagUtils::getResponseValue($apiAddress, 'ZipCode');
             $customer->address = $address;
         }
         
@@ -274,49 +256,49 @@ class BraspagApiServices
         }elseif($apiPayment->Type == 'Boleto') {
             $payment = new BraspagBoletoPayment();    
 
-            $payment->url = $this->utils->getResponseValue($apiPayment, 'Url');
-            $payment->barCodeNumber = $this->utils->getResponseValue($apiPayment, 'BarCodeNumber');
-            $payment->digitableLine = $this->utils->getResponseValue($apiPayment, 'DigitableLine');
-            $payment->boletoNumber = $this->utils->getResponseValue($apiPayment, 'BoletoNumber');
+            $payment->url = BraspagUtils::getResponseValue($apiPayment, 'Url');
+            $payment->barCodeNumber = BraspagUtils::getResponseValue($apiPayment, 'BarCodeNumber');
+            $payment->digitableLine = BraspagUtils::getResponseValue($apiPayment, 'DigitableLine');
+            $payment->boletoNumber = BraspagUtils::getResponseValue($apiPayment, 'BoletoNumber');
             
-            $payment->instructions = $this->utils->getResponseValue($apiPayment, 'Instructions');
-            $payment->expirationDate = $this->utils->getResponseValue($apiPayment, 'ExpirationDate');
-            $payment->demonstrative = $this->utils->getResponseValue($apiPayment, 'Demonstrative');
-            $payment->assignor = $this->utils->getResponseValue($apiPayment, 'Assignor');
-            $payment->address = $this->utils->getResponseValue($apiPayment, 'Address');
-            $payment->identification = $this->utils->getResponseValue($apiPayment, 'Identification');
+            $payment->instructions = BraspagUtils::getResponseValue($apiPayment, 'Instructions');
+            $payment->expirationDate = BraspagUtils::getResponseValue($apiPayment, 'ExpirationDate');
+            $payment->demonstrative = BraspagUtils::getResponseValue($apiPayment, 'Demonstrative');
+            $payment->assignor = BraspagUtils::getResponseValue($apiPayment, 'Assignor');
+            $payment->address = BraspagUtils::getResponseValue($apiPayment, 'Address');
+            $payment->identification = BraspagUtils::getResponseValue($apiPayment, 'Identification');
 
         }elseif($apiPayment->Type == 'EletronicTransfer'){
-            $payment->url = $this->utils->getResponseValue($apiPayment, 'Url');
+            $payment->url = BraspagUtils::getResponseValue($apiPayment, 'Url');
         }
         
         $payment->paymentId = $apiPayment->PaymentId;
         $payment->amount = $apiPayment->Amount;
-        $payment->capturedAmount = $this->utils->getResponseValue($apiPayment, 'CapturedAmount');
-        $payment->capturedAmount = $this->utils->getResponseValue($apiPayment, 'VoidedAmount');
+        $payment->capturedAmount = BraspagUtils::getResponseValue($apiPayment, 'CapturedAmount');
+        $payment->capturedAmount = BraspagUtils::getResponseValue($apiPayment, 'VoidedAmount');
         $payment->receivedDate = $apiPayment->ReceivedDate;
-        $payment->capturedDate = $this->utils->getResponseValue($apiPayment, 'CapturedDate');
-        $payment->voidedDate = $this->utils->getResponseValue($apiPayment, 'VoidedDate');
+        $payment->capturedDate = BraspagUtils::getResponseValue($apiPayment, 'CapturedDate');
+        $payment->voidedDate = BraspagUtils::getResponseValue($apiPayment, 'VoidedDate');
         $payment->country = $apiPayment->Country;
         $payment->currency = $apiPayment->Currency;
         $payment->provider = $apiPayment->Provider;
         $payment->status = $apiPayment->Status;
         $payment->reasonCode = $apiPayment->ReasonCode;
         $payment->reasonMessage = $apiPayment->ReasonMessage;
-        $payment->providerReturnCode = $this->utils->getResponseValue($apiPayment, 'ProviderReturnCode');
-        $payment->providerReturnMessage = $this->utils->getResponseValue($apiPayment, 'ProviderReturnMessage');
-        $payment->returnUrl = $this->utils->getResponseValue($apiPayment, 'ReturnUrl');        
+        $payment->providerReturnCode = BraspagUtils::getResponseValue($apiPayment, 'ProviderReturnCode');
+        $payment->providerReturnMessage = BraspagUtils::getResponseValue($apiPayment, 'ProviderReturnMessage');
+        $payment->returnUrl = BraspagUtils::getResponseValue($apiPayment, 'ReturnUrl');        
         $payment->links = $this->parseLinks($apiPayment->Links);
         
         return $payment;
     }
     
     private function parseCreditAndDebitPayment($payment, $apiPayment, $card){
-        $payment->authenticationUrl = $this->utils->getResponseValue($apiPayment, 'AuthenticationUrl');
-        $payment->authorizationCode = $this->utils->getResponseValue($apiPayment, 'AuthorizationCode');
-        $payment->acquirerTransactionId = $this->utils->getResponseValue($apiPayment, 'AcquirerTransactionId');
-        $payment->proofOfSale = $this->utils->getResponseValue($apiPayment, 'ProofOfSale');
-        $payment->eci = $this->utils->getResponseValue($apiPayment, 'Eci');
+        $payment->authenticationUrl = BraspagUtils::getResponseValue($apiPayment, 'AuthenticationUrl');
+        $payment->authorizationCode = BraspagUtils::getResponseValue($apiPayment, 'AuthorizationCode');
+        $payment->acquirerTransactionId = BraspagUtils::getResponseValue($apiPayment, 'AcquirerTransactionId');
+        $payment->proofOfSale = BraspagUtils::getResponseValue($apiPayment, 'ProofOfSale');
+        $payment->eci = BraspagUtils::getResponseValue($apiPayment, 'Eci');
 
         $parsedCard = new BraspagCard();
         $parsedCard->brand = $card->Brand;
@@ -324,22 +306,5 @@ class BraspagApiServices
         $parsedCard->expirationDate = $card->ExpirationDate;
         $parsedCard->holder = $card->Holder;
         $payment->creditCard = $parsedCard;
-    }
-
-    /**     
-     * Debug Function
-     * @param Sale $debug,$title 
-     * @return standardoutput
-     * @autor interatia
-     */
-    public function debug($debug,$title="Debug:")
-    {
-        echo "<hr/>";
-        echo "<h2>Start: $title</h2>";
-        echo '<textarea cols="100" rows="50">';    
-        print_r($debug);
-        echo "</textarea>";
-        echo "<h2>End: $title</h2>";
-        echo "<hr/>";
-    }   
+    }  
 }

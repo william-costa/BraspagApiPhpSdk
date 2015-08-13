@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 header('Content-Type: text/html; charset=utf-8');
 
 include($_SERVER['DOCUMENT_ROOT']."/src/BraspagApiIncludes.php");
@@ -55,20 +56,20 @@ if(is_a($result, 'BraspagSale')){
     /*
      * In this case, you made a succesful call to API and receive a Sale object in response
      */            
-    echo "<li><a href=\"example_all_get.php?paymentId={$sale->payment->paymentId}\" target=\"_blank\">Get Card</a></li></ul>";
+    echo "<li><a href=\"example_updatecustomer.php?recurrentPaymentId={$sale->payment->paymentId}\" target=\"_blank\">UpdateCustomer</a></li></ul>";
     
-    $api->debug($sale,"Card Recurrent Success!");  
+    BraspagUtils::debug($sale,"Card Recurrent Success!");  
     
 } elseif(is_array($result)){
     /*
      * In this case, you made a Bad Request and receive a collection with all errors
      */
-    $api->debug($result,"Bad Request Auth!");
+    BraspagUtils::debug($result,"Bad Request Auth!");
 } else{    
     /*
      * In this case, you received other error, such as Forbidden or Unauthorized
      */
-    $api->debug($result,"HTTP Status Code!");
+    BraspagUtils::debug($result,"HTTP Status Code!");
 }
 
 ?>
