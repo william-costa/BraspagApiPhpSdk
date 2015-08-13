@@ -11,7 +11,7 @@ class BraspagBoletoPayment extends BraspagPayment
 {
     public $address;
     public $assignor;
-    public $barcodeNumber;
+    public $barCodeNumber;
     public $boletoNumber;
     public $demonstrative;
     public $digitableLine;

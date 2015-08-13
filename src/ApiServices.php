@@ -5,7 +5,7 @@
  *
  * ApiServices description.
  *
- * @version 1.0
+ * @version 2.0
  * @author pfernandes
  */
 class BraspagApiServices
@@ -15,15 +15,18 @@ class BraspagApiServices
                 'MerchantId' => BraspagApiConfig::merchantId,
                 'MerchantKey' => BraspagApiConfig::merchantKey
             );
+
+        $this->utils = new BraspagUtils();
     }
     
     /**
      * Creates a sale
-     * Boleto Implements: @autor interatia
+    
      * @param Sale $sale 
      * @return mixed
      */
     public function CreateSale(BraspagSale $sale){
+
         $uri = BraspagApiConfig::apiUri . 'sales'; 
 
         $request = json_encode($sale, JSON_UNESCAPED_UNICODE);
@@ -35,37 +38,46 @@ class BraspagApiServices
             ->send();
         
         if($response->code == BraspagHttpStatus::Created){            
-            $sale->payment->paymentId = $response->body->Payment->PaymentId;
-            (property_exists($response->body->Payment,'AuthenticationUrl'))?($sale->payment->authenticationUrl = $response->body->Payment->AuthenticationUrl):('');
-            (property_exists($response->body->Payment,'AuthorizationCode'))?($sale->payment->authorizationCode = $response->body->Payment->AuthorizationCode):('');
-            (property_exists($response->body->Payment,'AcquirerTransactionId'))?($sale->payment->acquirerTransactionId = $response->body->Payment->AcquirerTransactionId):('');
-            (property_exists($response->body->Payment,'ProofOfSale'))?($sale->payment->proofOfSale = $response->body->Payment->ProofOfSale):('');
-            (property_exists($response->body->Payment,'Status'))?($sale->payment->status = $response->body->Payment->Status):('');
-            (property_exists($response->body->Payment,'ReasonCode'))?($sale->payment->reasonCode = $response->body->Payment->ReasonCode):('');
-            (property_exists($response->body->Payment,'ReasonMessage'))?($sale->payment->reasonMessage = $response->body->Payment->ReasonMessage):('');
-            (property_exists($response->body->Payment,'ProviderReturnCode'))?($sale->payment->providerReturnCode = $response->body->Payment->ProviderReturnCode):('');
-            (property_exists($response->body->Payment,'ProviderReturnMessage'))?($sale->payment->providerReturnMessage = $response->body->Payment->ProviderReturnMessage):('');
-            (property_exists($response->body->Payment,'Currency'))?($sale->payment->currency = $response->body->Payment->Currency):('');
-            (property_exists($response->body->Payment,'Country'))?($sale->payment->country = $response->body->Payment->Country):('');
+            $responsePayment = $response->body->Payment;
+
+            $sale->payment->paymentId = $responsePayment->PaymentId;
+            $sale->payment->status = $responsePayment->Status;
+            $sale->payment->reasonCode = $responsePayment->ReasonCode;
+            $sale->payment->reasonMessage = $responsePayment->ReasonMessage;
+            $sale->payment->currency = $responsePayment->Currency;
+            $sale->payment->country = $responsePayment->Country;
+            $sale->payment->providerReturnCode = $this->utils->getResponseValue($responsePayment, 'ProviderReturnCode');
+            $sale->payment->providerReturnMessage = $this->utils->getResponseValue($responsePayment, 'ProviderReturnMessage');
             
-            if($response->body->Payment->Type == 'Boleto'){
-                unset($sale->payment->address);
-                unset($sale->payment->boletoNumber);
-                unset($sale->payment->assignor);
-                unset($sale->payment->demonstrative);
-                unset($sale->payment->expirationDate);
-                unset($sale->payment->identification);
-                unset($sale->payment->instructions);
-                (property_exists($response->body->Payment,'Url'))?($sale->payment->url = $response->body->Payment->Url):('');
-                (property_exists($response->body->Payment,'BarCodeNumber'))?($sale->payment->barcodeNumber = $response->body->Payment->BarCodeNumber):('');
-                (property_exists($response->body->Payment,'DigitableLine'))?($sale->payment->digitableLine = $response->body->Payment->DigitableLine):('');            
-                (property_exists($response->body->Payment,'BoletoNumber'))?($sale->payment->boletoNumber = $response->body->Payment->BoletoNumber):('');
-                (property_exists($response->body->Payment,'Address'))?($sale->payment->address = $response->body->Payment->Address):('');
-                (property_exists($response->body->Payment,'Assignor'))?($sale->payment->assignor = $response->body->Payment->Assignor):('');
-                (property_exists($response->body->Payment,'Identification'))?($sale->payment->identification = $response->body->Payment->Identification):('');
-            }elseif($response->body->Payment->Type == 'EletronicTransfer'){                
-                (property_exists($response->body->Payment,'Url'))?($sale->payment->url = $response->body->Payment->Url):('');
+            if($responsePayment->Type == 'CreditCard' || $responsePayment->Type == 'DebitCard'){
+                $sale->payment->authenticationUrl = $this->utils->getResponseValue($responsePayment, 'AuthenticationUrl');
+                $sale->payment->authorizationCode = $this->utils->getResponseValue($responsePayment, 'AuthorizationCode');
+                $sale->payment->acquirerTransactionId = $this->utils->getResponseValue($responsePayment, 'AcquirerTransactionId');
+                $sale->payment->proofOfSale = $this->utils->getResponseValue($responsePayment, 'ProofOfSale');
+
+            }elseif($response->body->Payment->Type == 'Boleto'){
+                $sale->payment->url = $this->utils->getResponseValue($responsePayment, 'Url');
+                $sale->payment->barCodeNumber = $this->utils->getResponseValue($responsePayment, 'BarCodeNumber');
+                $sale->payment->digitableLine = $this->utils->getResponseValue($responsePayment, 'DigitableLine');
+                $sale->payment->boletoNumber = $this->utils->getResponseValue($responsePayment, 'BoletoNumber');
+
+            }elseif($response->body->Payment->Type == 'EletronicTransfer'){    
+                $sale->payment->url = $this->utils->getResponseValue($responsePayment, 'Url');                
+
             }            
+
+            $recurrentResponse = $this->utils->getResponseValue($responsePayment, 'RecurrentPayment');
+
+            if($recurrentResponse != null){
+                $sale->payment->recurrentPayment->recurrentPaymentId = $this->utils->getResponseValue($recurrentResponse, 'RecurrentPaymentId');
+                $sale->payment->recurrentPayment->reasonCode = $recurrentResponse->ReasonCode;
+                $sale->payment->recurrentPayment->reasonMessage = $recurrentResponse->ReasonMessage;
+                $sale->payment->recurrentPayment->nextRecurrency = $this->utils->getResponseValue($recurrentResponse, 'NextRecurrency');
+                $sale->payment->recurrentPayment->startDate = $this->utils->getResponseValue($recurrentResponse, 'StartDate');
+                $sale->payment->recurrentPayment->endDate = $this->utils->getResponseValue($recurrentResponse, 'EndDate');
+                $sale->payment->recurrentPayment->interval = $this->utils->getResponseValue($recurrentResponse, 'Interval');
+                $sale->payment->recurrentPayment->link = $this->parseLink($this->utils->getResponseValue($recurrentResponse, 'Link'));
+            }
 
             $sale->payment->links = $this->parseLinks($response->body->Payment->Links);
             
@@ -175,17 +187,28 @@ class BraspagApiServices
         return $response->code;
     }
     
-    private function parseLinks($source){
-        
+    /**
+     * Summary of parseLink
+     * @param mixed $source 
+     * @return BraspagLink
+     */
+    private function parseLink($source){
+        if($source == null) return null;
+
+        $link = new BraspagLink();
+        $link->href = $source->Href;
+        $link->method = $source->Method;
+        $link->rel = $source->Rel;
+
+        return $link;
+    }
+
+    private function parseLinks($source){        
         $linkCollection = array();
         
         foreach ($source as $l)
         {
-            $link = new BraspagLink();
-            $link->href = $l->Href;
-            $link->method = $l->Method;
-            $link->rel = $l->Rel;
-            
+            $link = $this->parseLink($l);            
             array_push($linkCollection, $link);
         }
         
@@ -233,28 +256,29 @@ class BraspagApiServices
     }
     
     private function parsePayment($apiPayment){
-        
+        $payment = new BraspagPayment();
+
         if(property_exists($apiPayment,'BarCodeNumber')) {
             $payment = new BraspagBoletoPayment();    
             
-            $boleto = new BraspagBoleto();
-            (property_exists($apiPayment,'Instructions'))?($boleto->instructions = $apiPayment->Instructions):('');
-            (property_exists($apiPayment,'ExpirationDate'))?($boleto->expirationDate = $apiPayment->ExpirationDate):('');
-            (property_exists($apiPayment,'Demonstrative'))?($boleto->demonstrative = $apiPayment->Demonstrative):('');
-            (property_exists($apiPayment,'Url'))?($boleto->url = $apiPayment->Url):('');
-            (property_exists($apiPayment,'BoletoNumber'))?($boleto->boletoNumber = $apiPayment->BoletoNumber):('');
-            (property_exists($apiPayment,'BarCodeNumber'))?($boleto->barcodeNumber = $apiPayment->BarCodeNumber):('');
-            (property_exists($apiPayment,'DigitableLine'))?($boleto->digitableLine = $apiPayment->DigitableLine):('');
-            (property_exists($apiPayment,'Assignor'))?($boleto->assignor = $apiPayment->Assignor):('');
-            (property_exists($apiPayment,'Address'))?($boleto->address = $apiPayment->Address):('');
-            (property_exists($apiPayment,'Identification'))?($boleto->identification = $apiPayment->Identification):('');
-            $payment->boleto = $boleto;
-            
+            (property_exists($apiPayment,'Instructions'))?($payment->instructions = $apiPayment->Instructions):('');
+            (property_exists($apiPayment,'ExpirationDate'))?($payment->expirationDate = $apiPayment->ExpirationDate):('');
+            (property_exists($apiPayment,'Demonstrative'))?($payment->demonstrative = $apiPayment->Demonstrative):('');
+            (property_exists($apiPayment,'Url'))?($payment->url = $apiPayment->Url):('');
+            (property_exists($apiPayment,'BoletoNumber'))?($payment->boletoNumber = $apiPayment->BoletoNumber):('');
+            (property_exists($apiPayment,'BarCodeNumber'))?($payment->barcodeNumber = $apiPayment->BarCodeNumber):('');
+            (property_exists($apiPayment,'DigitableLine'))?($payment->digitableLine = $apiPayment->DigitableLine):('');
+            (property_exists($apiPayment,'Assignor'))?($payment->assignor = $apiPayment->Assignor):('');
+            (property_exists($apiPayment,'Address'))?($payment->address = $apiPayment->Address):('');
+            (property_exists($apiPayment,'Identification'))?($payment->identification = $apiPayment->Identification):('');
         }
         
         if(property_exists($apiPayment,'CreditCard')){
             $payment = new BraspagCreditCardPayment();
             $payment->installments = $apiPayment->Installments;
+            $payment->capture = $apiPayment->Capture;
+            $payment->authenticate = $apiPayment->Authenticate;
+            $payment->interest = $apiPayment->Interest;
             
             $card = new BraspagCard();
             $card->brand = $apiPayment->CreditCard->Brand;
@@ -262,7 +286,6 @@ class BraspagApiServices
             $card->expirationDate = $apiPayment->CreditCard->ExpirationDate;
             $card->holder = $apiPayment->CreditCard->Holder;
             $payment->creditCard = $card;
-
         }
         
         $payment->paymentId = $apiPayment->PaymentId;
@@ -279,17 +302,12 @@ class BraspagApiServices
         (property_exists($apiPayment,'Country'))?($payment->country = $apiPayment->Country):('');
         (property_exists($apiPayment,'Currency'))?($payment->currency = $apiPayment->Currency):('');
         
-        (property_exists($apiPayment,'Capture'))?($payment->capture = $apiPayment->Capture):('');
-        (property_exists($apiPayment,'Authenticate'))?($payment->authenticate = $apiPayment->Authenticate):('');
-        (property_exists($apiPayment,'Interest'))?($payment->interest = $apiPayment->Interest):('');
-        
         $payment->links = $this->parseLinks($apiPayment->Links);
         
         return $payment;
     }
     
-    /**
-     * Creates a sale
+    /**     
      * Debug Function
      * @param Sale $debug,$title 
      * @return standardoutput

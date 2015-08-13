@@ -17,6 +17,8 @@ include 'models/BraspagBoletoPayment.php';
 include 'models/BraspagCustomer.php';
 include 'models/BraspagInterest.php';
 include 'models/BraspagError.php';
+include 'models/BraspagRecurrentPayment.php';
 include 'conf/BraspagApiConfig.php';
 include 'ApiServices.php';
+include 'BraspagUtils.php';
 ?>

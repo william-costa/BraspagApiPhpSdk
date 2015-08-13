@@ -17,6 +17,7 @@ class BraspagPayment
 	public $providerReturnMessage;
     public $status;
     public $links;
+    public $recurrentPayment;
     
     public function __construct(){
         $this->country = BraspagApiConfig::defaultCountry;

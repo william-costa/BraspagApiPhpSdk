@@ -20,9 +20,11 @@
     <Content Include="src\libs\httpful.phar" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Examples\example_credit_recurrent_authorize.php" />
     <Compile Include="Examples\example_eletronictransfer_authorize.php" />
     <Compile Include="src\ApiServices.php" />
     <Compile Include="src\BraspagApiIncludes.php" />
+    <Compile Include="src\BraspagUtils.php" />
     <Compile Include="src\conf\BraspagApiConfig.php" />
     <Compile Include="Examples\example_all_get.php" />
     <Compile Include="Examples\example_boleto_authorize.php" />
@@ -44,6 +46,7 @@
     <Compile Include="src\models\BraspagInterest.php" />
     <Compile Include="src\models\BraspagLink.php" />
     <Compile Include="src\models\BraspagPayment.php" />
+    <Compile Include="src\models\BraspagRecurrentPayment.php" />
     <Compile Include="src\models\BraspagSale.php" />
     <Compile Include="src\models\BraspagVoidResponse.php" />
   </ItemGroup>
