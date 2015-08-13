@@ -1,6 +1,13 @@
 <?php
 
-class BraspagBoleto
+/**
+ * Define BoletoPayment model.
+ *
+ * @version 1.0
+ * @author interatia
+ */
+
+class BraspagBoletoPayment extends BraspagPayment
 {
     public $address;
     public $assignor;
@@ -12,5 +19,10 @@ class BraspagBoleto
     public $identification;
     public $instructions;
     public $url;
+    
+    public function __construct(){
+        $this->type = "Boleto";        
+    }
 }
 
+?>

@@ -1,5 +1,5 @@
 <?php
-include 'BraspagApiIncludes.php';
+include($_SERVER['DOCUMENT_ROOT']."/src/BraspagApiIncludes.php");
 
 $sale = new BraspagSale();
 $sale->merchantOrderId = '2014112703';
@@ -22,20 +22,16 @@ $address->zipCode = "20020-080";
 $customer->address = $address;
 $sale->customer = $customer;
 
-$boleto = new BraspagBoleto();
-$boleto->address = "Endereço do Cedente";
-$boleto->assignor =  'Nome do Cedente';
-$boleto->boletoNumber = '2014112703';
-$boleto->demonstrative =  'Texto de Demonstrativo';
-$boleto->expirationDate = "2015-09-02";
-$boleto->identification = '005383715000194';
-$boleto->instructions = 'Instruções do Boleto';
-
 $payment = new BraspagBoletoPayment();
 $payment->amount = 15900;
-$payment->provider = "Simulado";
-
-$payment->boleto = $boleto;
+$payment-> provider = "Simulado";
+$provider-> address = "Endereço do Cedente";
+$provider-> assignor =  'Nome do Cedente';
+$provider-> boletoNumber = '2014112703';
+$provider-> demonstrative =  'Texto de Demonstrativo';
+$provider-> expirationDate = "2015-09-02";
+$provider-> identification = '005383715000194';
+$provider-> instructions = 'Instruções do Boleto';
 
 $sale->payment = $payment;
 

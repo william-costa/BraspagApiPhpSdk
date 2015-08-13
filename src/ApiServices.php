@@ -25,23 +25,13 @@ class BraspagApiServices
      */
     public function CreateSale(BraspagSale $sale){
         $uri = BraspagApiConfig::apiUri . 'sales'; 
-        
-        if($sale->payment->type == 'Boleto') {
-          $sale->payment->address = $sale->payment->boleto->address;
-          $sale->payment->boletoNumber = $sale->payment->boleto->boletoNumber;
-          $sale->payment->assignor = $sale->payment->boleto->assignor;
-          $sale->payment->demonstrative = $sale->payment->boleto->demonstrative;
-          $sale->payment->expirationDate = $sale->payment->boleto->expirationDate;
-          $sale->payment->identification = $sale->payment->boleto->identification;
-          $sale->payment->instructions = $sale->payment->boleto->instructions;
-        }
-               
-        $post_data = json_encode($sale);
+
+        $request = json_encode($sale, JSON_UNESCAPED_UNICODE);
         
         $response = \Httpful\Request::post($uri)
             ->sendsJson()
             ->addHeaders($this->headers)
-            ->body($post_data)
+            ->body($request)            
             ->send();
         
         if($response->code == BraspagHttpStatus::Created){            
@@ -66,13 +56,19 @@ class BraspagApiServices
                 unset($sale->payment->expirationDate);
                 unset($sale->payment->identification);
                 unset($sale->payment->instructions);
-                (property_exists($response->body->Payment,'Url'))?($sale->payment->boleto->url = $response->body->Payment->Url):('');
-                (property_exists($response->body->Payment,'BarCodeNumber'))?($sale->payment->boleto->barcodeNumber = $response->body->Payment->BarCodeNumber):('');
-                (property_exists($response->body->Payment,'DigitableLine'))?($sale->payment->boleto->digitableLine = $response->body->Payment->DigitableLine):('');
-            }
+                (property_exists($response->body->Payment,'Url'))?($sale->payment->url = $response->body->Payment->Url):('');
+                (property_exists($response->body->Payment,'BarCodeNumber'))?($sale->payment->barcodeNumber = $response->body->Payment->BarCodeNumber):('');
+                (property_exists($response->body->Payment,'DigitableLine'))?($sale->payment->digitableLine = $response->body->Payment->DigitableLine):('');            
+                (property_exists($response->body->Payment,'BoletoNumber'))?($sale->payment->boletoNumber = $response->body->Payment->BoletoNumber):('');
+                (property_exists($response->body->Payment,'Address'))?($sale->payment->address = $response->body->Payment->Address):('');
+                (property_exists($response->body->Payment,'Assignor'))?($sale->payment->assignor = $response->body->Payment->Assignor):('');
+                (property_exists($response->body->Payment,'Identification'))?($sale->payment->identification = $response->body->Payment->Identification):('');
+            }elseif($response->body->Payment->Type == 'EletronicTransfer'){                
+                (property_exists($response->body->Payment,'Url'))?($sale->payment->url = $response->body->Payment->Url):('');
+            }            
 
             $sale->payment->links = $this->parseLinks($response->body->Payment->Links);
-                        
+            
             return $sale;
         }elseif($response->code == BraspagHttpStatus::BadRequest){          
             return $this->getBadRequestErros($response->body);             
@@ -159,12 +155,12 @@ class BraspagApiServices
      * @return mixed
      */
     public function Get($paymentId){
-        $uri = BraspagApiConfig::apiQueryuri . "sales/{$paymentId}"; 
+        $uri = BraspagApiConfig::apiQueryUri . "sales/{$paymentId}"; 
         $response = \Httpful\Request::get($uri)
             ->sendsJson()
             ->addHeaders($this->headers)
             ->send();
-                    
+        
         if($response->code == BraspagHttpStatus::Ok){    
             $sale = new BraspagSale();
             $sale->merchantOrderId = $response->body->MerchantOrderId;
@@ -195,11 +191,11 @@ class BraspagApiServices
         
         return $linkCollection;
     }
-       
+    
     private function getBadRequestErros($errors){
         
         $badRequestErrors = array();
-      
+        
         foreach ($errors as $e)
         {
             $error = new BraspagError();
@@ -222,14 +218,14 @@ class BraspagApiServices
         
         if($apiCustomer->Address != null){
             $address = new BraspagAddress();
-           (property_exists($apiCustomer->Address,'City'))?($address->city = $apiCustomer->Address->City):('');
-           (property_exists($apiCustomer->Address,'Complement'))?($address->complement = $apiCustomer->Address->Complement ):('');
-           (property_exists($apiCustomer->Address,'Country'))?($address->country = $apiCustomer->Address->Country):('');
-           (property_exists($apiCustomer->Address,'District'))?($address->district = $apiCustomer->Address->District):('');
-           (property_exists($apiCustomer->Address,'Number'))?($address->number = $apiCustomer->Address->Number):('');
-           (property_exists($apiCustomer->Address,'State'))?($address->state = $apiCustomer->Address->State):('');
-           (property_exists($apiCustomer->Address,'Street'))?($address->street = $apiCustomer->Address->Street):('');
-           (property_exists($apiCustomer->Address,'ZipCode'))?($address->zipCode = $apiCustomer->Address->ZipCode):('');
+            (property_exists($apiCustomer->Address,'City'))?($address->city = $apiCustomer->Address->City):('');
+            (property_exists($apiCustomer->Address,'Complement'))?($address->complement = $apiCustomer->Address->Complement ):('');
+            (property_exists($apiCustomer->Address,'Country'))?($address->country = $apiCustomer->Address->Country):('');
+            (property_exists($apiCustomer->Address,'District'))?($address->district = $apiCustomer->Address->District):('');
+            (property_exists($apiCustomer->Address,'Number'))?($address->number = $apiCustomer->Address->Number):('');
+            (property_exists($apiCustomer->Address,'State'))?($address->state = $apiCustomer->Address->State):('');
+            (property_exists($apiCustomer->Address,'Street'))?($address->street = $apiCustomer->Address->Street):('');
+            (property_exists($apiCustomer->Address,'ZipCode'))?($address->zipCode = $apiCustomer->Address->ZipCode):('');
             $customer->address = $address;
         }
         
@@ -292,7 +288,7 @@ class BraspagApiServices
         return $payment;
     }
     
-     /**
+    /**
      * Creates a sale
      * Debug Function
      * @param Sale $debug,$title 
@@ -308,6 +304,5 @@ class BraspagApiServices
         echo "</textarea>";
         echo "<h2>End: $title</h2>";
         echo "<hr/>";
-    }
-    
+    }   
 }

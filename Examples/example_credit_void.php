@@ -1,6 +1,5 @@
 <?php
-
-include 'BraspagApiIncludes.php';
+include($_SERVER['DOCUMENT_ROOT']."/src/BraspagApiIncludes.php");
 
 $paymentId = $_GET['paymentId'];
 

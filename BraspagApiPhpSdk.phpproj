@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Name>BraspagApiPhpSdk</Name>
+    <ProjectGuid>2631ee1d-a95e-4d1c-9a15-58b18578ff14</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>BraspagApiPhpSdk</RootNamespace>
+    <ProjectTypeGuids>{A0786B88-2ADB-4C21-ABE8-AA2D79766269}</ProjectTypeGuids>
+    <AssemblyName>BraspagApiPhpSdk</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <IncludeDebugInformation>true</IncludeDebugInformation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <IncludeDebugInformation>false</IncludeDebugInformation>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="src\conf\BraspagApiConfig.php.example" />
+    <Content Include="src\libs\httpful.phar" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Examples\example_eletronictransfer_authorize.php" />
+    <Compile Include="src\ApiServices.php" />
+    <Compile Include="src\BraspagApiIncludes.php" />
+    <Compile Include="src\conf\BraspagApiConfig.php" />
+    <Compile Include="Examples\example_all_get.php" />
+    <Compile Include="Examples\example_boleto_authorize.php" />
+    <Compile Include="Examples\example_credit_authorize.php" />
+    <Compile Include="Examples\example_credit_capture.php" />
+    <Compile Include="Examples\example_credit_void.php" />
+    <Compile Include="Examples\example_debit_authorize.php" />
+    <Compile Include="src\models\BraspagAddress.php" />
+    <Compile Include="src\models\BraspagBoletoPayment.php" />
+    <Compile Include="src\models\BraspagCaptureRequest.php" />
+    <Compile Include="src\models\BraspagCaptureResponse.php" />
+    <Compile Include="src\models\BraspagCard.php" />
+    <Compile Include="src\models\BraspagCreditCardPayment.php" />
+    <Compile Include="src\models\BraspagCustomer.php" />
+    <Compile Include="src\models\BraspagDebitCardPayment.php" />
+    <Compile Include="src\models\BraspagEletronicTransferPayment.php" />
+    <Compile Include="src\models\BraspagError.php" />
+    <Compile Include="src\models\BraspagHttpStatus.php" />
+    <Compile Include="src\models\BraspagInterest.php" />
+    <Compile Include="src\models\BraspagLink.php" />
+    <Compile Include="src\models\BraspagPayment.php" />
+    <Compile Include="src\models\BraspagSale.php" />
+    <Compile Include="src\models\BraspagVoidResponse.php" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\conf\" />
+    <Folder Include="src\libs\" />
+    <Folder Include="src\models\" />
+    <Folder Include="Examples\" />
+    <Folder Include="src\" />
+  </ItemGroup>
+</Project>

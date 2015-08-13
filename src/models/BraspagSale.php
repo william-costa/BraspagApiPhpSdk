@@ -6,3 +6,5 @@ class BraspagSale
     public $customer;
     public $payment;
 }
+
+?>

@@ -1,21 +1,18 @@
 <?php
 
-class BraspagCreditCardPayment extends BraspagPayment
+class BraspagDebitCardPayment extends BraspagPayment
 {
     public $serviceTaxAmount;
-    public $installments;
-    public $interest;
-    public $capture;
-    public $authenticate;
-    public $creditCard;
+    public $debitCard;
     public $authenticationUrl;
     public $authorizationCode;
     public $proofOfSale;
     public $acquirerTransactionId;
     public $softDescriptor;
+    public $eci;
     
     public function __construct(){
-        $this->type = "CreditCard";
+        $this->type = "DebitCard";
         $this->authenticate = BraspagApiConfig::defaultAuthenticate;
         $this->capture = BraspagApiConfig::defaultCapture;
         $this->interest = BraspagApiConfig::defaultInterest;

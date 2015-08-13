@@ -1,6 +1,5 @@
 <?php
-
-include 'BraspagApiIncludes.php';
+include($_SERVER['DOCUMENT_ROOT']."/src/BraspagApiIncludes.php");
 
 $sale = new BraspagSale();
 $sale->merchantOrderId = '2014112703';
@@ -63,6 +62,6 @@ if(is_a($result, 'BraspagSale')){
      * In this case, you received other error, such as Forbidden or Unauthorized
      */
     $api->debug($result,"HTTP Status Code!");
-}
+}l
 
 ?>
