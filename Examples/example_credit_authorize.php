@@ -42,7 +42,7 @@ $payment->creditCard = $card;
 $sale->payment = $payment;
 
 $api = new BraspagApiServices();
-$result = $api->CreateSale($sale);
+$result = $api->createSale($sale);
 			
 if(is_a($result, 'BraspagSale')){
     /*

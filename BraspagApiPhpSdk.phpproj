@@ -23,6 +23,12 @@
   <ItemGroup>
     <Compile Include="Examples\RecurrentPayments\example_credit_recurrent_authorize.php" />
     <Compile Include="Examples\example_eletronictransfer_authorize.php" />
+    <Compile Include="Examples\RecurrentPayments\example_update_amount.php" />
+    <Compile Include="Examples\RecurrentPayments\example_update_day.php" />
+    <Compile Include="Examples\RecurrentPayments\example_update_endDate.php" />
+    <Compile Include="Examples\RecurrentPayments\example_update_interval.php" />
+    <Compile Include="Examples\RecurrentPayments\example_update_nextpaymentdate.php" />
+    <Compile Include="Examples\RecurrentPayments\example_update_installments.php" />
     <Compile Include="Examples\RecurrentPayments\example_update_customer.php" />
     <Compile Include="src\ApiServices.php" />
     <Compile Include="src\BraspagApiIncludes.php" />

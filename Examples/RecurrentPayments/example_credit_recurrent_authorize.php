@@ -50,14 +50,20 @@ $payment->recurrentPayment = $recurrent;
 $sale->payment = $payment;
 
 $api = new BraspagApiServices();
-$result = $api->CreateSale($sale);
+$result = $api->createSale($sale);
 
 if(is_a($result, 'BraspagSale')){
     /*
      * In this case, you made a succesful call to API and receive a Sale object in response
      */            
-    echo "<li><a href=\"example_updatecustomer.php?recurrentPaymentId={$sale->payment->paymentId}\" target=\"_blank\">UpdateCustomer</a></li></ul>";
-    
+    echo "<li><a href=\"example_update_customer.php?recurrentPaymentId={$sale->payment->recurrentPayment->recurrentPaymentId}\" target=\"_blank\">UpdateCustomer</a></li></ul>";
+    echo "<li><a href=\"example_update_installments.php?recurrentPaymentId={$sale->payment->recurrentPayment->recurrentPaymentId}\" target=\"_blank\">UpdateInstallments</a></li></ul>";
+    echo "<li><a href=\"example_update_nextpaymentdate.php?recurrentPaymentId={$sale->payment->recurrentPayment->recurrentPaymentId}\" target=\"_blank\">UpdateNextPaymentDate</a></li></ul>";
+    echo "<li><a href=\"example_update_amount.php?recurrentPaymentId={$sale->payment->recurrentPayment->recurrentPaymentId}\" target=\"_blank\">UpdateAmount</a></li></ul>";
+    echo "<li><a href=\"example_update_endDate.php?recurrentPaymentId={$sale->payment->recurrentPayment->recurrentPaymentId}\" target=\"_blank\">UpdateEndDate</a></li></ul>";
+    echo "<li><a href=\"example_update_day.php?recurrentPaymentId={$sale->payment->recurrentPayment->recurrentPaymentId}\" target=\"_blank\">UpdateDay</a></li></ul>";
+    echo "<li><a href=\"example_update_interval.php?recurrentPaymentId={$sale->payment->recurrentPayment->recurrentPaymentId}\" target=\"_blank\">UpdateInterval</a></li></ul>";
+      
     BraspagUtils::debug($sale,"Card Recurrent Success!");  
     
 } elseif(is_array($result)){

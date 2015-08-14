@@ -23,7 +23,7 @@ class BraspagApiServices
      * @param Sale $sale 
      * @return mixed
      */
-    public function CreateSale(BraspagSale $sale){
+    public function createSale(BraspagSale $sale){
 
         $uri = BraspagApiConfig::apiUri . 'sales'; 
 
@@ -98,7 +98,7 @@ class BraspagApiServices
      * @param CaptureRequest $captureRequest 
      * @return mixed
      */
-    public function Capture($paymentId, BraspagCaptureRequest $captureRequest){        
+    public function capture($paymentId, BraspagCaptureRequest $captureRequest){        
         $uri = BraspagApiConfig::apiUri . "sales/{$paymentId}/capture"; 
         
         if($captureRequest != null){
@@ -134,7 +134,7 @@ class BraspagApiServices
      * @param int $amount 
      * @return mixed
      */
-    public function Void($paymentId, $amount){
+    public function void($paymentId, $amount){
         $uri = BraspagApiConfig::apiUri . "sales/{$paymentId}/void"; 
         
         if($amount != null){
@@ -169,7 +169,7 @@ class BraspagApiServices
      * @param GUID $paymentId 
      * @return mixed
      */
-    public function Get($paymentId){
+    public function get($paymentId){
         $uri = BraspagApiConfig::apiQueryUri . "sales/{$paymentId}"; 
         $response = \Httpful\Request::get($uri)
             ->sendsJson()
