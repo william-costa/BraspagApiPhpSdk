@@ -22,7 +22,7 @@ $address->zipCode = "20020-080";
 $customer->address = $address;
 
 $recurrentApi = new RecurrentApiServices();
-$result = $recurrentApi->UpdateCustomer($recurrentPaymentId, $customer);
+$result = $recurrentApi->updateCustomer($recurrentPaymentId, $customer);
 
 if($result == 200){
     /*

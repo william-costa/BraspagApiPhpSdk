@@ -32,7 +32,7 @@ $payment->returnUrl = "http://www.braspag.com.br";
 $sale->payment = $payment;
 
 $api = new BraspagApiServices();
-$result = $api->CreateSale($sale);
+$result = $api->createSale($sale);
 			
 if(is_a($result, 'BraspagSale')){
     /*

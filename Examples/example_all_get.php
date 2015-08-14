@@ -6,7 +6,7 @@ include($_SERVER['DOCUMENT_ROOT']."/src/BraspagApiIncludes.php");
 $paymentId = $_GET['paymentId'];
 
 $api = new BraspagApiServices();
-$result = $api->Get($paymentId);
+$result = $api->get($paymentId);
 
 if(is_a($result, 'BraspagSale')){
     /*

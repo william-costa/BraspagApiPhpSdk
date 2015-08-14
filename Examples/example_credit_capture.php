@@ -9,7 +9,7 @@ $captureRequest = new BraspagCaptureRequest();
 $captureRequest->amount = 1500;
 
 $api = new BraspagApiServices();
-$result = $api->Capture($paymentId, $captureRequest);
+$result = $api->capture($paymentId, $captureRequest);
 
 if(is_a($result, 'BraspagCaptureResponse')){
     /*
