@@ -64,6 +64,6 @@ if(is_a($result, 'BraspagSale')){
      * In this case, you received other error, such as Forbidden or Unauthorized
      */
     BraspagUtils::debug($result,"HTTP Status Code!");
-}l
+}
 
 ?>
