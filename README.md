@@ -10,5 +10,5 @@ The new name is ignored by git (see .gitignore).
 Fill in the values of your MerchandId and MerchandKey.
 
 ## Exemples
-You can see examples of use in fales prefixed with "example_{operation}" inside Exemplaes folder.
+You can see examples of use in fales prefixed with "example_{operation}" inside Exemples folder.
 
