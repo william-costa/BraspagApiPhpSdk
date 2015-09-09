@@ -58,6 +58,27 @@ class BraspagApiServices
                 $sale->payment->acquirerTransactionId = BraspagUtils::getResponseValue($responsePayment, 'AcquirerTransactionId');
                 $sale->payment->proofOfSale = BraspagUtils::getResponseValue($responsePayment, 'ProofOfSale');
 
+                if(BraspagUtils::getResponseValue($responsePayment, 'FraudAnalysis') != null){
+                    $antiFraudResponse = BraspagUtils::getResponseValue($responsePayment, 'FraudAnalysis');
+
+                    $replyData = new BraspagFraudAnalysisReplyData();
+                    $replyData->addressInfoCode = BraspagUtils::getResponseValue($antiFraudResponse->ReplyData, 'AddressInfoCode');
+                    $replyData->factorCode = BraspagUtils::getResponseValue($antiFraudResponse->ReplyData, 'FactorCode');
+                    $replyData->score = BraspagUtils::getResponseValue($antiFraudResponse->ReplyData, 'Score');
+                    $replyData->binCountry = BraspagUtils::getResponseValue($antiFraudResponse->ReplyData, 'BinCountry');
+                    $replyData->cardIssuer = BraspagUtils::getResponseValue($antiFraudResponse->ReplyData, 'CardIssuer');
+                    $replyData->cardScheme = BraspagUtils::getResponseValue($antiFraudResponse->ReplyData, 'CardScheme');
+                    $replyData->hostSeverity = BraspagUtils::getResponseValue($antiFraudResponse->ReplyData, 'HostSeverity');
+                    $replyData->internetInfoCode = BraspagUtils::getResponseValue($antiFraudResponse->ReplyData, 'InternetInfoCode');
+                    $replyData->ipRoutingMethod = BraspagUtils::getResponseValue($antiFraudResponse->ReplyData, 'IpRoutingMethod');
+                    $replyData->scoreModelUsed = BraspagUtils::getResponseValue($antiFraudResponse->ReplyData, 'ScoreModelUsed');
+                    $replyData->casePriority = BraspagUtils::getResponseValue($antiFraudResponse->ReplyData, 'CasePriority');
+
+                    $sale->payment->fraudAnalysis->status = $antiFraudResponse->Status;
+
+                    $sale->payment->fraudAnalysis->replyData = $replyData;
+                }
+
             }elseif($response->body->Payment->Type == 'Boleto'){
                 $sale->payment->url = BraspagUtils::getResponseValue($responsePayment, 'Url');
                 $sale->payment->barCodeNumber = BraspagUtils::getResponseValue($responsePayment, 'BarCodeNumber');

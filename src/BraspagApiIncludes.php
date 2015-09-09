@@ -23,6 +23,7 @@ include 'models/BraspagCart.php';
 include 'models/BraspagCartItem.php';
 include 'models/BraspagFraudAnalysis.php';
 include 'models/BraspagPassenger.php';
+include 'models/BraspagFraudAnalysisReplyData.php';
 include 'conf/BraspagApiConfig.php';
 include 'ApiServices.php';
 include 'RecurrentApiServices.php';

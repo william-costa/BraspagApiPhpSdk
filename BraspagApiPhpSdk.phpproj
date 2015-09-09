@@ -21,6 +21,7 @@
     <Content Include="src\libs\httpful.phar" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Examples\example_credit_authorizeantifraud.php" />
     <Compile Include="Examples\RecurrentPayments\example_credit_recurrent_authorize.php" />
     <Compile Include="Examples\example_eletronictransfer_authorize.php" />
     <Compile Include="Examples\RecurrentPayments\example_update_amount.php" />
@@ -41,21 +42,27 @@
     <Compile Include="Examples\example_debit_authorize.php" />
     <Compile Include="src\models\BraspagAddress.php" />
     <Compile Include="src\models\BraspagBoletoPayment.php" />
+    <Compile Include="src\models\BraspagBrowser.php" />
     <Compile Include="src\models\BraspagCaptureRequest.php" />
     <Compile Include="src\models\BraspagCaptureResponse.php" />
     <Compile Include="src\models\BraspagCard.php" />
+    <Compile Include="src\models\BraspagCart.php" />
+    <Compile Include="src\models\BraspagCartItem.php" />
     <Compile Include="src\models\BraspagCreditCardPayment.php" />
     <Compile Include="src\models\BraspagCustomer.php" />
     <Compile Include="src\models\BraspagDebitCardPayment.php" />
     <Compile Include="src\models\BraspagEletronicTransferPayment.php" />
     <Compile Include="src\models\BraspagError.php" />
+    <Compile Include="src\models\BraspagFraudAnalysis.php" />
     <Compile Include="src\models\BraspagHttpStatus.php" />
     <Compile Include="src\models\BraspagInterest.php" />
     <Compile Include="src\models\BraspagLink.php" />
+    <Compile Include="src\models\BraspagPassenger.php" />
     <Compile Include="src\models\BraspagPayment.php" />
     <Compile Include="src\models\BraspagRecurrentPayment.php" />
     <Compile Include="src\models\BraspagSale.php" />
     <Compile Include="src\models\BraspagVoidResponse.php" />
+    <Compile Include="src\models\BraspagFraudAnalysisReplyData.php" />
     <Compile Include="src\RecurrentApiServices.php" />
   </ItemGroup>
   <ItemGroup>

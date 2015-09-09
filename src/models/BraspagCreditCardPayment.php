@@ -15,6 +15,7 @@ class BraspagCreditCardPayment extends BraspagPayment
     public $acquirerTransactionId;
     public $softDescriptor;
     public $eci;
+    public $fraudAnalysis;
     
     public function __construct(){
         $this->type = "CreditCard";

@@ -32,20 +32,16 @@ $payment->installments = 3;
 
 $card = new BraspagCard();
 $card->brand = "Visa";
-$card->cardNumber = "4532117080573700";
+$card->cardNumber = "4024007197692931";
 $card->expirationDate = "12/2015";
 $card->holder = "Test T S Testando";
 $card->securityCode = "000";
 
 $payment->creditCard = $card;
 
-
-
 $sale->payment = $payment;
 
-$fraudAnalysis = new BraspagFraudAnalysis;
-$fraudAnalysis->sequence = $this=>config->item('Sequence');
-$fraudAnalysis->sequenceCriteria = $this=>config->item('SequenceCriteria');
+$fraudAnalysis = new BraspagFraudAnalysis();
 $fraudAnalysis->fingerPrintId = "074c1ee676ed4998ab66491013c565e2";
 $fraudAnalysis->captureOnLowRisk = false;
 $fraudAnalysis->voidOnHighRisk = false;
@@ -53,8 +49,8 @@ $fraudAnalysis->voidOnHighRisk = false;
 $browser = new BraspagBrowser;
 $browser->cookiesAccepted = $_COOKIE > 0;
 $browser->email = $params->customer->email;
-$browser->hostName = 'localhost';
-$browser->ipAddress = '127.0.0.1';
+$browser->hostName = 'Teste';
+$browser->ipAddress = '200.190.150.350';
 $browser->type = 'Chrome';
 
 $cart = new BraspagCart;
@@ -91,7 +87,7 @@ $cart->items = $cartItems;
 
 $fraudAnalysis->browser = $browser;
 $fraudAnalysis->cart = $cart;
-$sale->fraudAnalysis = $fraudAnalysis;
+$sale->payment->fraudAnalysis = $fraudAnalysis;
 
 
 $api = new BraspagApiServices();
