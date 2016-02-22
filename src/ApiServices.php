@@ -57,6 +57,7 @@ class BraspagApiServices
                 $sale->payment->authorizationCode = BraspagUtils::getResponseValue($responsePayment, 'AuthorizationCode');
                 $sale->payment->acquirerTransactionId = BraspagUtils::getResponseValue($responsePayment, 'AcquirerTransactionId');
                 $sale->payment->proofOfSale = BraspagUtils::getResponseValue($responsePayment, 'ProofOfSale');
+				$sale->payment->creditCard = BraspagUtils::getResponseValue($responsePayment, 'CreditCard');
 
                 if(BraspagUtils::getResponseValue($responsePayment, 'FraudAnalysis') != null){
                     $antiFraudResponse = BraspagUtils::getResponseValue($responsePayment, 'FraudAnalysis');
