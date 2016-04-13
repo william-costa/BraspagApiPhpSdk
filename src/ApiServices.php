@@ -247,13 +247,13 @@ class BraspagApiServices
         if($apiAddress != null){
             $address = new BraspagAddress();
             $address->country = $apiAddress->Country;
-            $customer->city = BraspagUtils::getResponseValue($apiAddress, 'City');
-            $customer->complement = BraspagUtils::getResponseValue($apiAddress, 'Complement');
-            $customer->district = BraspagUtils::getResponseValue($apiAddress, 'District');
-            $customer->number = BraspagUtils::getResponseValue($apiAddress, 'Number');
-            $customer->state = BraspagUtils::getResponseValue($apiAddress, 'State');
-            $customer->street = BraspagUtils::getResponseValue($apiAddress, 'Street');
-            $customer->zipCode = BraspagUtils::getResponseValue($apiAddress, 'ZipCode');
+            $address->city = BraspagUtils::getResponseValue($apiAddress, 'City');
+            $address->complement = BraspagUtils::getResponseValue($apiAddress, 'Complement');
+            $address->district = BraspagUtils::getResponseValue($apiAddress, 'District');
+            $address->number = BraspagUtils::getResponseValue($apiAddress, 'Number');
+            $address->state = BraspagUtils::getResponseValue($apiAddress, 'State');
+            $address->street = BraspagUtils::getResponseValue($apiAddress, 'Street');
+            $address->zipCode = BraspagUtils::getResponseValue($apiAddress, 'ZipCode');
             $customer->address = $address;
         }
         
