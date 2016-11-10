@@ -11,11 +11,11 @@
 	],
 	"autoload" : {
 		"psr-4" : {
-			"Braspag\\Api" : "src/Braspag/Api"
+			"Braspag\\" : "src/Braspag"
 		}
 	},
 	"require" : {
-		"php" : ">=5.7"
+		"php" : ">=5.6"
 	},
 	"type" : "library",
 	"license" : "GPL-2.0+",
