@@ -146,6 +146,7 @@ class Payment implements \JsonSerializable
         $this->paymentId = isset($data->PaymentId)? $data->PaymentId: null;
         $this->type = isset($data->Type)? $data->Type: null;
         $this->amount = isset($data->Amount)? $data->Amount: null;
+        $this->capturedAmount = isset($data->CapturedAmount)? $data->CapturedAmount: null;
         $this->receivedDate = isset($data->ReceivedDate)? $data->ReceivedDate: null;
         $this->currency = isset($data->Currency)? $data->Currency: null;
         $this->country = isset($data->Country)? $data->Country: null;
