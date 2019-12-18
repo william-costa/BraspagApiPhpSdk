@@ -123,13 +123,11 @@ class Payment implements \JsonSerializable
         if (isset($data->CreditCard)) {
             $this->creditCard = new CreditCard();
             $this->creditCard->populate($data->CreditCard);
-            $this->setType(self::PAYMENTTYPE_CREDITCARD);
         }
 
         if (isset($data->DebitCard)) {
             $this->debitCard = new CreditCard();
             $this->debitCard->populate($data->DebitCard);
-            $this->setType(self::PAYMENTTYPE_DEBITCARD);
         }
 
         $this->expirationDate  =  isset($data->ExpirationDate)?$data->ExpirationDate: null;
@@ -158,7 +156,6 @@ class Payment implements \JsonSerializable
         $this->status = isset($data->Status)? $data->Status: null;
 
         $this->links = isset($data->Links)? $data->Links: [];
-        $this->extraDataCollection = isset($data->ExtraDataCollection)? $data->ExtraDataCollection: [];
     }
 
     public static function fromJson($json)
@@ -474,6 +471,17 @@ class Payment implements \JsonSerializable
     public function setCountry($country)
     {
         $this->country = $country;
+        return $this;
+    }
+
+    public function getReasonMessage()
+    {
+        return $this->reasonMessage;
+    }
+
+    public function setReasonMessage($reasonMessage)
+    {
+        $this->reasonMessage = $reasonMessage;
         return $this;
     }
 
