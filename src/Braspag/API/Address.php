@@ -10,6 +10,8 @@ class Address implements BraspagSerializable
 
     private $complement;
 
+    private $district;
+
     private $zipCode;
 
     private $city;
@@ -28,6 +30,7 @@ class Address implements BraspagSerializable
         $this->street = isset($data->Street)? $data->Street: null;
         $this->number = isset($data->Number)? $data->Number: null;
         $this->complement = isset($data->Complement)? $data->Complement: null;
+        $this->district = isset($data->District)? $data->District: null;
         $this->zipCode = isset($data->ZipCode)? $data->ZipCode: null;
         $this->city = isset($data->City)? $data->City: null;
         $this->state = isset($data->State)? $data->State: null;
@@ -64,6 +67,17 @@ class Address implements BraspagSerializable
     public function setComplement($complement)
     {
         $this->complement = $complement;
+        return $this;
+    }
+
+    public function getDistrict()
+    {
+        return $this->district;
+    }
+
+    public function setDistrict($district)
+    {
+        $this->district = $district;
         return $this;
     }
 
