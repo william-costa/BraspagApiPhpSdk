@@ -62,6 +62,10 @@ class Payment implements \JsonSerializable
 
     private $capturedDate;
 
+    private $voidedAmount;
+
+    private $voidedDate;
+
     private $currency;
 
     private $country;
@@ -149,6 +153,9 @@ class Payment implements \JsonSerializable
         $this->type = isset($data->Type)? $data->Type: null;
         $this->amount = isset($data->Amount)? $data->Amount: null;
         $this->capturedAmount = isset($data->CapturedAmount)? $data->CapturedAmount: null;
+        $this->capturedDate = isset($data->CapturedDate)? $data->CapturedDate: null;
+        $this->voidedAmount = isset($data->VoidedAmount)? $data->VoidedAmount: null;
+        $this->voidedDate = isset($data->VoidedDate)? $data->VoidedDate: null;
         $this->receivedDate = isset($data->ReceivedDate)? $data->ReceivedDate: null;
         $this->currency = isset($data->Currency)? $data->Currency: null;
         $this->country = isset($data->Country)? $data->Country: null;
@@ -453,6 +460,28 @@ class Payment implements \JsonSerializable
     public function setCapturedDate($capturedDate)
     {
         $this->capturedDate = $capturedDate;
+        return $this;
+    }
+
+    public function getVoidedAmount()
+    {
+        return $this->voidedAmount;
+    }
+
+    public function setVoidedAmount($voidedAmount)
+    {
+        $this->voidedAmount = $voidedAmount;
+        return $this;
+    }
+
+    public function getVoidedDate()
+    {
+        return $this->voidedDate;
+    }
+
+    public function setVoidedDate($voidedDate)
+    {
+        $this->voidedDate = $voidedDate;
         return $this;
     }
 
