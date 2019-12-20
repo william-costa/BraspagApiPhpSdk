@@ -36,6 +36,8 @@ class Payment implements \JsonSerializable
 
     private $debitCard;
 
+    private $fraudAnalysis;
+
     private $authenticationUrl;
 
     private $tid;
@@ -111,7 +113,6 @@ class Payment implements \JsonSerializable
 
     public function populate(\stdClass $data)
     {
-
         $this->serviceTaxAmount = isset($data->ServiceTaxAmount)? $data->ServiceTaxAmount: null;
         $this->installments = isset($data->Installments)? $data->Installments: null;
         $this->interest = isset($data->Interest)? $data->Interest: null;
@@ -134,6 +135,11 @@ class Payment implements \JsonSerializable
             $this->debitCard = new CreditCard();
             $this->debitCard->populate($data->DebitCard);
             $this->setType(self::PAYMENTTYPE_DEBITCARD);
+        }
+
+        if (isset($data->FraudAnalysis)) {
+            $this->fraudAnalysis = new FraudAnalysis();
+            $this->fraudAnalysis->populate($data->FraudAnalysis);
         }
 
         $this->expirationDate  =  isset($data->ExpirationDate)?$data->ExpirationDate: null;
@@ -213,6 +219,16 @@ class Payment implements \JsonSerializable
         $this->setRecurrentPayment($recurrentPayment);
 
         return $recurrentPayment;
+    }
+
+
+    public function fraudAnalysis($provider)
+    {
+        $fraudAnalysis = new FraudAnalysis($provider);
+
+        $this->setFraudAnalysis($fraudAnalysis);
+
+        return $fraudAnalysis;
     }
 
     public function getServiceTaxAmount()
@@ -317,6 +333,17 @@ class Payment implements \JsonSerializable
     public function setDebitCard($debitCard)
     {
         $this->debitCard = $debitCard;
+        return $this;
+    }
+
+    public function getFraudAnalysis()
+    {
+        return $this->fraudAnalysis;
+    }
+
+    public function setFraudAnalysis($fraudAnalysis)
+    {
+        $this->fraudAnalysis = $fraudAnalysis;
         return $this;
     }
 
@@ -661,3 +688,4 @@ class Payment implements \JsonSerializable
         return $this;
     }
 }
+
